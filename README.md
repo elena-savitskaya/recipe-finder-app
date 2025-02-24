@@ -21,7 +21,7 @@ Follow the steps below to get the project running on your local machine.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/elena-savitskaya/evofitness.git
+git clone https://github.com/elena-savitskaya/recipe-finder-app.git
 ```
 cd recipe-finder-app
 
