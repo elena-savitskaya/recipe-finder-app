@@ -1,5 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation"; // Use this hook
+
 type Recipe = {
   id: number;
   title: string;
@@ -12,20 +15,40 @@ const fetchRecipes = async (
   maxReadyTime: string
 ) => {
   const res = await fetch(
-    `/api/recipes?query=${query}&cuisine=${cuisine}&maxReadyTime=${maxReadyTime}`
+    `/api/recipes?query=${encodeURIComponent(query)}&cuisine=${encodeURIComponent(cuisine)}&maxReadyTime=${encodeURIComponent(maxReadyTime)}`
   );
   if (!res.ok) throw new Error("Error fetching recipes");
   const data = await res.json();
   return data;
 };
 
-export const RecipesPage = async ({
-  searchParams,
-}: {
-  searchParams: { query: string; cuisine: string; maxReadyTime: string };
-}) => {
-  const { query, cuisine, maxReadyTime } = await searchParams;
-  const recipes = await fetchRecipes(query, cuisine, maxReadyTime);
+const RecipesPage = () => {
+  const searchParams = useSearchParams(); // Access search params using this hook
+  const query = searchParams?.get("query") || "";
+  const cuisine = searchParams?.get("cuisine") || "";
+  const maxReadyTime = searchParams?.get("maxReadyTime") || "";
+
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getRecipes = async () => {
+      try {
+        const data = await fetchRecipes(query, cuisine, maxReadyTime);
+        setRecipes(data);
+      } catch (err) {
+        setError("Failed to fetch recipes");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getRecipes();
+  }, [query, cuisine, maxReadyTime]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="h-screen flex justify-center items-center bg-white">
@@ -50,3 +73,5 @@ export const RecipesPage = async ({
     </div>
   );
 };
+
+export default RecipesPage;
