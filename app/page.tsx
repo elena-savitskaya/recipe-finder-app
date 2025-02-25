@@ -1,4 +1,4 @@
-import { RecipeForm } from "./components/recipeForm";
+import { RecipeForm } from "@/components/recipeForm";
 
 export default function Home() {
   return (

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Loader } from "@/components/loader";
 
 type Recipe = {
   id: number;
@@ -30,7 +31,6 @@ const RecipesPage = () => {
   const maxReadyTime = searchParams?.get("maxReadyTime") || "";
 
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,44 +41,44 @@ const RecipesPage = () => {
       } catch (err) {
         setError("Failed to fetch recipes");
       } finally {
-        setLoading(false);
       }
     };
 
     getRecipes();
   }, [query, cuisine, maxReadyTime]);
 
-  if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className="h-screen flex justify-center bg-white">
       <div className="max-w-3xl w-full p-6">
         <h1 className="text-2xl font-semibold text-black mb-6">Recipes</h1>
-        {recipes.length === 0 ? (
-          <div className="text-center text-black">
-            No recipes found for your search criteria.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recipes.map((recipe: Recipe) => (
-              <div
-                key={recipe.id}
-                className="border rounded-lg shadow-md p-4 cursor-pointer"
-                onClick={() => {
-                  router.push(`/recipes/${recipe.id}`);
-                }}
-              >
-                <img
-                  src={recipe.image}
-                  alt={recipe.title}
-                  className="w-full h-48 object-cover rounded-md mb-4"
-                />
-                <h2 className="font-semibold text-lg">{recipe.title}</h2>
-              </div>
-            ))}
-          </div>
-        )}
+        <Suspense fallback={<Loader />}>
+          {recipes.length === 0 ? (
+            <div className="text-center text-black">
+              No recipes found for your search criteria.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {recipes.map((recipe: Recipe) => (
+                <div
+                  key={recipe.id}
+                  className="border rounded-lg shadow-md p-4 cursor-pointer"
+                  onClick={() => {
+                    router.push(`/recipes/${recipe.id}`);
+                  }}
+                >
+                  <img
+                    src={recipe.image}
+                    alt={recipe.title}
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                  />
+                  <h2 className="font-semibold text-lg">{recipe.title}</h2>
+                </div>
+              ))}
+            </div>
+          )}
+        </Suspense>
       </div>
     </div>
   );
