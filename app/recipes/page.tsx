@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // Use this hook
+import { useSearchParams } from "next/navigation";
 
 type Recipe = {
   id: number;
@@ -23,7 +23,7 @@ const fetchRecipes = async (
 };
 
 const RecipesPage = () => {
-  const searchParams = useSearchParams(); // Access search params using this hook
+  const searchParams = useSearchParams();
   const query = searchParams?.get("query") || "";
   const cuisine = searchParams?.get("cuisine") || "";
   const maxReadyTime = searchParams?.get("maxReadyTime") || "";
