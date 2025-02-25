@@ -11,7 +11,12 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "API key missing" }, { status: 500 });
   }
 
-  const apiUrl = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(query)}&cuisine=${encodeURIComponent(cuisine)}&maxReadyTime=${encodeURIComponent(maxReadyTime)}&apiKey=${apiKey}`;
+  let apiUrl = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}`;
+
+  if (query) apiUrl += `&query=${encodeURIComponent(query)}`;
+  if (cuisine) apiUrl += `&cuisine=${encodeURIComponent(cuisine)}`;
+  if (maxReadyTime)
+    apiUrl += `&maxReadyTime=${encodeURIComponent(maxReadyTime)}`;
 
   try {
     const res = await fetch(apiUrl);

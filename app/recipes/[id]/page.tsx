@@ -83,7 +83,7 @@ const RecipeDetailsPage = () => {
   return (
     <div className="max-w-4xl w-full p-6 mx-auto bg-white shadow-lg rounded-lg flex flex-col gap-4">
       <h1 className="text-3xl font-bold text-center">{recipe.title}</h1>
-      <div className="flex flex-col md:flex-row items-center justify-between">
+      <div className="flex flex-col md:flex-row items-center gap-10">
         <img
           src={recipe.image}
           alt={recipe.title}
