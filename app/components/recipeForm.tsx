@@ -5,7 +5,7 @@ import { useState, FormEvent } from "react";
 
 export const RecipeForm = () => {
   const [query, setQuery] = useState<string>("");
-  const [cuisine, setCuisine] = useState<string>("Italian");
+  const [cuisine, setCuisine] = useState<string>("");
   const [prepTime, setPrepTime] = useState<string>("");
   const router = useRouter();
 
@@ -25,19 +25,20 @@ export const RecipeForm = () => {
   const isFormValid = query || cuisine || prepTime;
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 items-center">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for a recipe (e.g., pasta)"
-        className="px-4 py-2 w-64 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+        className="px-4 py-2 w-full text-black border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
       />
       <select
         value={cuisine}
         onChange={(e) => setCuisine(e.target.value)}
-        className="px-4 py-2 w-64 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+        className="px-4 py-2 w-full text-black border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 appearance-none pr-10"
       >
+        <option value="">Select cuisine</option>
         <option value="African">African</option>
         <option value="Asian">Asian</option>
         <option value="American">American</option>
@@ -71,15 +72,15 @@ export const RecipeForm = () => {
         value={prepTime}
         onChange={(e) => setPrepTime(e.target.value)}
         placeholder="Max Preparation Time (in minutes)"
-        className="px-4 py-2 w-64 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+        className="px-4 py-2 w-full text-black border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
       />
       <button
         type="submit"
         disabled={!isFormValid}
-        className={`px-6 py-2 w-64 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 transition-all ${
+        className={`px-6 py-2 shadow-xl w-full text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 transition-all ${
           isFormValid
             ? "bg-green-500 hover:bg-green-600"
-            : "bg-gray-500 cursor-not-allowed"
+            : "bg-gray-400 cursor-not-allowed"
         }`}
       >
         Next

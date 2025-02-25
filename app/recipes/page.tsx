@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Recipe = {
   id: number;
@@ -24,6 +24,7 @@ const fetchRecipes = async (
 
 const RecipesPage = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const query = searchParams?.get("query") || "";
   const cuisine = searchParams?.get("cuisine") || "";
   const maxReadyTime = searchParams?.get("maxReadyTime") || "";
@@ -51,24 +52,33 @@ const RecipesPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="h-screen flex justify-center items-center bg-white">
+    <div className="h-screen flex justify-center bg-white">
       <div className="max-w-3xl w-full p-6">
         <h1 className="text-2xl font-semibold text-black mb-6">Recipes</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recipes.map((recipe: Recipe) => (
-            <div
-              key={recipe.id}
-              className="border rounded-lg shadow-md p-4 cursor-pointer"
-            >
-              <img
-                src={recipe.image}
-                alt={recipe.title}
-                className="w-full h-48 object-cover rounded-md mb-4"
-              />
-              <h2 className="font-semibold text-lg">{recipe.title}</h2>
-            </div>
-          ))}
-        </div>
+        {recipes.length === 0 ? (
+          <div className="text-center text-black">
+            No recipes found for your search criteria.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {recipes.map((recipe: Recipe) => (
+              <div
+                key={recipe.id}
+                className="border rounded-lg shadow-md p-4 cursor-pointer"
+                onClick={() => {
+                  router.push(`/recipes/${recipe.id}`);
+                }}
+              >
+                <img
+                  src={recipe.image}
+                  alt={recipe.title}
+                  className="w-full h-48 object-cover rounded-md mb-4"
+                />
+                <h2 className="font-semibold text-lg">{recipe.title}</h2>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
