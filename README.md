@@ -4,8 +4,6 @@
 
 This project is a Next.js app that allows you to search for recipes by keyword, cuisine, and cooking time. The data is taken from the Spoonacular API.
 
-🚀 [**View Demo**](https://elena-savitskaya.github.io/recipe-finder-app/)
-
 ## Project Structure
 
 - **React** — Library for building user interfaces.
